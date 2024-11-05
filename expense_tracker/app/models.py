@@ -33,8 +33,8 @@ class AddMoneyInfo(models.Model):
     category = models.CharField(choices=SELECT_CATEGORY, default="Food")
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE), 
-    proffesion = models.CharField(max_length=20, choices=PROFESSION), 
+    user = models.OneToOneField(User, on_delete=models.CASCADE),
+    proffesion = models.CharField(max_length=20, choices=PROFESSION),
     savings = models.IntegerField(null=True, blank=True),
     income = models.IntegerField(null=True, blank=True)
     
