@@ -26,15 +26,17 @@ PROFESSION = [
 ]
 
 class AddMoneyInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE),
-    add_money = models.CharField(choices = ADD_EXPENSE),
-    quantity = models.IntegerField(),
-    date = models.DateField(default=now),
-    category = models.CharField(choices=SELECT_CATEGORY, default="Food")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    add_money = models.CharField(max_length=20, choices = ADD_EXPENSE)
+    quantity = models.IntegerField()
+    date = models.DateField(default=now)
+    category = models.CharField(max_length=20, choices=SELECT_CATEGORY, default="Food")
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE),
-    proffesion = models.CharField(max_length=20, choices=PROFESSION),
-    savings = models.IntegerField(null=True, blank=True),
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profession = models.CharField(max_length=20, choices=PROFESSION)
+    savings = models.IntegerField(null=True, blank=True)
     income = models.IntegerField(null=True, blank=True)
-    
+
+    def __str__(self):
+        return f"{self.user}"
