@@ -1,11 +1,20 @@
 from django import forms
-from .models import PROFESSION
+from django.contrib.auth.models import User
+from .models import UserProfile
 
-class SignupForm(forms.Form):
-    username = forms.CharField(max_length=20, label="Username")
-    fname = forms.CharField(max_length=20, label="First name")
-    lname = forms.CharField(max_length=20, label="Last name")
-    email = forms.EmailField(max_length=100, label="Email")
-    profession = forms.ChoiceField(widget=forms.RadioSelect, choices=PROFESSION)
-    savings = forms.IntegerField(required=False)
-    income = forms.IntegerField(required=True)
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "email", "password"]
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ["user"]
+
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "password"]

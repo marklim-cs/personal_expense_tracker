@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
     <h1>Sign Up</h1>
-    <form action="/signup" method="post">
+    <form method="post" action="{% url 'signup'%}">
         {% csrf_token %}
-        {{ form }}
+        <h2>User Information</h2>
+        {{ user_form.as_p }}
+
+        <h2>Profile Information</h2>
+        {{ profile_form.as_p }}
+
+        <button type="submit">Sign up</button> 
     </form>
 {% endblock %}
