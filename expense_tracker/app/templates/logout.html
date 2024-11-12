@@ -8,4 +8,7 @@
             {% endfor %}
         {% endif %}
     </ul>
+    <form method="get" action="{% url 'login' %}">
+        <button type="submit">Log in</button>
+    </form>
 {% endblock %}

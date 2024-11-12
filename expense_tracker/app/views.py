@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
 from .forms import UserForm, UserProfileForm, LoginForm
 
+def index(request):
+    return render(request, "index.html")
 
 def handle_signup(request):
     if request.method == "POST":
