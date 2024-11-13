@@ -3,9 +3,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
 from .forms import UserForm, UserProfileForm, LoginForm
+from .models import UserProfile
 
 def index(request):
-    return render(request, "index.html")
+    if request.user.is_authenticated:
+        return render(request, "home.html")
+    else:
+        return render(request, "index.html")
+
+def home(request):
+    user_profile = UserProfile.objects.get(user=request.user)
 
 def handle_signup(request):
     if request.method == "POST":
@@ -39,9 +46,6 @@ def handle_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                request.session['logged_in'] = True
-                user_id = request.user.id
-                request.session['user_id'] = user_id
                 return redirect("/home")
             else:
                 messages.error(request, "Invalid username or password. Please, try again.")
