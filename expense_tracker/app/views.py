@@ -37,6 +37,8 @@ def handle_signup(request):
             profile.user = user
             profile.save()
 
+            login(request, user)
+
             return redirect('/home')
     else:
         user_form = UserForm()
