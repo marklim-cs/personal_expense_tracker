@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
-    <h1>Success!</h1>
+    {% if user.first_name %}
+        <h1>Welcome, {{ user.first_name }}!</h1>
+    {% else %}
+        <h1>Welcome, {{ user.username }}!</h1>
+    {% endif %}
+    <ul>
+        <li>My income: {{ income }}</li>
+        <li>My savings: {{ savings }}</li>
+    </ul>
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit">Log out</button>

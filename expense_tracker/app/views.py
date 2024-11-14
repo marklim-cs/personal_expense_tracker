@@ -7,12 +7,21 @@ from .models import UserProfile
 
 def index(request):
     if request.user.is_authenticated:
-        return render(request, "home.html")
+        return redirect("/home")
     else:
         return render(request, "index.html")
 
 def home(request):
     user_profile = UserProfile.objects.get(user=request.user)
+
+    context = {
+        "user": request.user, 
+        "profession": user_profile.profession, 
+        "savings": user_profile.savings, 
+        "income": user_profile.income,
+    }
+
+    return render(request, "home.html", context)
 
 def handle_signup(request):
     if request.method == "POST":
