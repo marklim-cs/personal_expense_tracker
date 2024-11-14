@@ -12,6 +12,9 @@ def index(request):
         return render(request, "index.html")
 
 def home(request):
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
+
     user_profile = UserProfile.objects.get(user=request.user)
 
     context = {
