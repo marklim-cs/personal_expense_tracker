@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+{% include "header.html" %}
+    <h1>Add your expenses</h1>
+    <form method="post" action="{% url 'add_expenses' %}">
+        {% csrf_token %}
+        {{ expenses_form }}
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

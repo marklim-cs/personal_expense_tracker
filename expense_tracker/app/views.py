@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
-from .forms import UserForm, UserProfileForm, LoginForm
+from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
 from .models import UserProfile
 
 def index(request):
@@ -22,9 +22,38 @@ def home(request):
         "profession": user_profile.profession, 
         "savings": user_profile.savings, 
         "income": user_profile.income,
+        "expenses": user_profile.expenses,
     }
 
     return render(request, "home.html", context)
+
+def add_expenses(request):
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
+
+    if request.method == "POST":
+        expenses_form = AddMoneyForm(request.POST)
+
+        if expenses_form.is_valid():
+            expense_type = expenses_form.cleaned_data["expense_type"]
+            quantity = expenses_form.cleaned_data["quantity"]
+
+            expense = expenses_form.save(commit=False)
+            expense.user = request.user
+            expense.save()
+
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            if expense_type == "Expense":
+                user_profile.expenses = user_profile.expenses + quantity
+            elif expense_type == "Saving":
+                user_profile.savings = user_profile.savings + quantity
+
+            return redirect("/home")
+    else:
+        expenses_form = AddMoneyForm()
+
+    return render(request, 'add_expenses.html', {"expenses_form": expenses_form})
 
 def handle_signup(request):
     if request.method == "POST":

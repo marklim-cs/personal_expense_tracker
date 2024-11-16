@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
+    {% include "header.html" %}
     {% if user.first_name %}
         <h1>Welcome, {{ user.first_name }}!</h1>
     {% else %}
@@ -8,9 +9,9 @@
     <ul>
         <li>My income: {{ income }}</li>
         <li>My savings: {{ savings }}</li>
+        <li>My expenses: {{ expenses }}</li>
     </ul>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Log out</button>
+    <form method="get" action="{% url 'add_expenses' %}">
+        <button type="submit">Add expenses</button>
     </form>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
     <h1>Sign Up</h1>
-    <form method="post" action="{% url 'signup'%}">
+    <form method="post" action="{% url 'signup' %}">
         {% csrf_token %}
         <h2>User Information</h2>
         {{ user_form.as_p }}
