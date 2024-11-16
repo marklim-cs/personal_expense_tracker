@@ -46,8 +46,13 @@ def add_expenses(request):
 
             if expense_type == "Expense":
                 user_profile.expenses = user_profile.expenses + quantity
+                user_profile.save(update_fields=["expenses"])
             elif expense_type == "Saving":
                 user_profile.savings = user_profile.savings + quantity
+                user_profile.save(update_fields=["savings"])
+            elif expense_type == "Income":
+                user_profile.income = user_profile.income + quantity
+                user_profile.save(update_fields=["income"])
 
             return redirect("/home")
     else:

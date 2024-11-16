@@ -11,12 +11,14 @@ SELECT_CATEGORY = [
     ("Necessities", "Necessities"),
     ("Entertainment", "Entertainment"),
     ("Savings", "Savings"),
+    ("Income", "Income"),
     ("Other", "Other"),
 ]
 
 ADD_EXPENSE = [
     ("Expense", "Expense"),
-    ("Income", "Income")
+    ("Income", "Income"),
+    ("Saving", "Saving"),
 ]
 
 PROFESSION = [
