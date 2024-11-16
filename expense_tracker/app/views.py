@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
+from django.contrib.auth.models import User
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
-from .models import UserProfile
+from .models import UserProfile, AddMoneyInfo
 
 def index(request):
     if request.user.is_authenticated:
@@ -59,6 +60,14 @@ def add_expenses(request):
         expenses_form = AddMoneyForm()
 
     return render(request, 'add_expenses.html', {"expenses_form": expenses_form})
+
+def history(request):
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
+
+    user_addings = AddMoneyInfo.objects.filter(user=request.user).order_by('-date')
+
+    return render(request, "history.html", {"user_addings": user_addings})
 
 def handle_signup(request):
     if request.method == "POST":

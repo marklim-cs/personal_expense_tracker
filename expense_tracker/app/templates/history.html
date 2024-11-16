@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block body %}
+{% include "header.html" %}
+    <h1>History of Addings</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for adding in user_addings %}
+                <tr>
+                    <td>{{ adding.date }}</td>
+                    <td>{{ adding.get_expense_type_display}}</td>
+                    <td>{{ adding.get_add_expense_display }}</td>
+                    <td>{{ adding.get_category_display }}</td>
+                    <td>{{ adding.quantity }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
