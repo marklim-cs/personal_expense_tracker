@@ -12,15 +12,31 @@
             </tr>
         </thead>
         <tbody>
-            {% for adding in user_addings %}
-                <tr>
-                    <td>{{ adding.date }}</td>
-                    <td>{{ adding.get_expense_type_display}}</td>
-                    <td>{{ adding.get_add_expense_display }}</td>
-                    <td>{{ adding.get_category_display }}</td>
-                    <td>{{ adding.quantity }}</td>
-                </tr>
+            {% for listing in page_obj %}
+            <tr>
+                <td>{{ listing.date }}</td>
+                <td>{{ listing.get_expense_type_display}}</td>
+                <td>{{ listing.get_add_expense_display }}</td>
+                <td>{{ listing.get_category_display }}</td>
+                <td>{{ listing.quantity }}</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 {% endblock %}

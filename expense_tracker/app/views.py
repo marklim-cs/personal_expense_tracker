@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
-from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
 from .models import UserProfile, AddMoneyInfo
 
@@ -66,8 +66,12 @@ def history(request):
         return render(request, "index.html")
 
     user_addings = AddMoneyInfo.objects.filter(user=request.user).order_by('-date')
+    paginator = Paginator(user_addings, 2)
 
-    return render(request, "history.html", {"user_addings": user_addings})
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "history.html", {"page_obj": page_obj})
 
 def handle_signup(request):
     if request.method == "POST":
