@@ -66,12 +66,26 @@ def history(request):
         return render(request, "index.html")
 
     user_addings = AddMoneyInfo.objects.filter(user=request.user).order_by('-date')
-    paginator = Paginator(user_addings, 2)
+    paginator = Paginator(user_addings, 7)
 
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     return render(request, "history.html", {"page_obj": page_obj})
+
+def delete_expense(request):
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
+
+    try:
+        if request.method == "POST":
+            expense_adding_id = request.POST.get("expense_id")
+            expense_adding = AddMoneyInfo.objects.get(user=request.user, id=expense_adding_id)
+            expense_adding.delete()
+
+            return redirect("/history")
+    except AddMoneyInfo.DoesNotExist:
+        return render(request, "history.html", )
 
 def handle_signup(request):
     if request.method == "POST":

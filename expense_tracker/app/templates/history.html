@@ -19,6 +19,13 @@
                 <td>{{ listing.get_add_expense_display }}</td>
                 <td>{{ listing.get_category_display }}</td>
                 <td>{{ listing.quantity }}</td>
+                <td>
+                    <form method="post" action="{%  url 'delete_expense' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="expense_id" value="{{ listing.id }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
