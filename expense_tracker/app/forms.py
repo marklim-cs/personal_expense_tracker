@@ -21,4 +21,4 @@ class LoginForm(forms.Form):
 class AddMoneyForm(forms.ModelForm):
     class Meta:
         model = AddMoneyInfo
-        fields = ["expense_type", "quantity", "date", "category"]
+        fields = ["money_type", "quantity", "date", "category"]

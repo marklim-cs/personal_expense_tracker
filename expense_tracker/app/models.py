@@ -30,7 +30,7 @@ PROFESSION = [
 
 class AddMoneyInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    expense_type = models.CharField(max_length=20, choices = ADD_EXPENSE)
+    money_type = models.CharField(max_length=20, choices = ADD_EXPENSE)
     quantity = models.IntegerField()
     date = models.DateField(default=now)
     category = models.CharField(max_length=20, choices=SELECT_CATEGORY, default="Food")

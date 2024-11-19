@@ -12,10 +12,10 @@
         <li>My expenses: {{ expenses }}</li>
     </ul>
     <form method="get" action="{% url 'add_expenses' %}">
-        <button type="submit">Add expenses</button>
+        <button type="submit">Add money details</button>
     </form>
 
     <form method="get" action="{% url 'history' %}">
-        <button type="submit">Addings history</button>
+        <button type="submit">Money history</button>
     </form>
 {% endblock %}

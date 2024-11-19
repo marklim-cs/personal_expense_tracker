@@ -36,7 +36,7 @@ def add_expenses(request):
         expenses_form = AddMoneyForm(request.POST)
 
         if expenses_form.is_valid():
-            expense_type = expenses_form.cleaned_data["expense_type"]
+            money_type = expenses_form.cleaned_data["money_type"]
             quantity = expenses_form.cleaned_data["quantity"]
 
             expense = expenses_form.save(commit=False)
@@ -45,13 +45,13 @@ def add_expenses(request):
 
             user_profile = UserProfile.objects.get(user=request.user)
 
-            if expense_type == "Expense":
+            if money_type == "Expense":
                 user_profile.expenses = user_profile.expenses + quantity
                 user_profile.save(update_fields=["expenses"])
-            elif expense_type == "Saving":
+            elif money_type == "Saving":
                 user_profile.savings = user_profile.savings + quantity
                 user_profile.save(update_fields=["savings"])
-            elif expense_type == "Income":
+            elif money_type == "Income":
                 user_profile.income = user_profile.income + quantity
                 user_profile.save(update_fields=["income"])
 
@@ -77,15 +77,28 @@ def delete_expense(request):
     if not request.user.is_authenticated:
         return render(request, "index.html")
 
+
     try:
         if request.method == "POST":
             expense_adding_id = request.POST.get("expense_id")
             expense_adding = AddMoneyInfo.objects.get(user=request.user, id=expense_adding_id)
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            if expense_adding.money_type == "Expense":
+                user_profile.expenses = user_profile.expenses - expense_adding.quantity
+                user_profile.save(update_fields=["expenses"])
+            elif expense_adding.money_type == "Saving":
+                user_profile.savings = user_profile.savings - expense_adding.quantity
+                user_profile.save(update_fields=["savings"])
+            elif expense_adding.money_type == "Income":
+                user_profile.income = user_profile.income - expense_adding.quantity
+                user_profile.save(update_fields=["income"])
+
             expense_adding.delete()
 
             return redirect("/history")
     except AddMoneyInfo.DoesNotExist:
-        return render(request, "history.html", )
+        return render(request, "history.html", {"error": "Entry doesn't exist"})
 
 def handle_signup(request):
     if request.method == "POST":

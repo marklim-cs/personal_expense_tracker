@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-    <h1>History of Addings</h1>
+    <h1>Money history</h1>
     <table>
         <thead>
             <tr>
@@ -15,7 +15,7 @@
             {% for listing in page_obj %}
             <tr>
                 <td>{{ listing.date }}</td>
-                <td>{{ listing.get_expense_type_display}}</td>
+                <td>{{ listing.get_money_type_display}}</td>
                 <td>{{ listing.get_add_expense_display }}</td>
                 <td>{{ listing.get_category_display }}</td>
                 <td>{{ listing.quantity }}</td>
