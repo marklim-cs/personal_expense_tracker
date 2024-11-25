@@ -1,16 +1,20 @@
 {% extends "layout.html" %}
 {% block body %}
+<div class="container">
     <h1>Log in</h1>
     <form method="post" action="{% url 'login' %}">
         <ul class="messages">
+            <div class="alert alert-danger" role="alert">
             {% if messages %}
                 {% for message in messages %}
                     <p {% if message.tags %} class="{{ message.tags }}" {% endif%} style="color: red;"> {{ message }}</p>
                 {% endfor %}
             {% endif %}
+            </div>
         </ul>
         {% csrf_token %}
         {{login_form.as_p}}
         <button type="submit">Log in</button>
     </form>
+</div>
 {% endblock %}
