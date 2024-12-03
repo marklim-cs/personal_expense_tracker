@@ -1,8 +1,10 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
 from django.core.paginator import Paginator
+from django.db.models import Avg, Sum
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
 from .models import UserProfile, AddMoneyInfo
 
@@ -73,6 +75,34 @@ def history(request):
 
     return render(request, "history.html", {"page_obj": page_obj})
 
+def thirty_days_expense(request):
+    today = datetime.date.today()
+    one_month_ago = today - datetime.timedelta(days=30)
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return render(request, "index.html")
+
+    money_info_queryset = AddMoneyInfo.objects.filter(user=current_user, money_type="Expense", date__gte=one_month_ago, date__lte=today)
+    print("QUERY SET = ", money_info_queryset)
+    expense_summary = get_expense_category(money_info_queryset)
+
+    return render(request, "thirty_days.html", {"expense_summary": expense_summary})
+
+def get_expense_category(money_info_queryset):
+    expense_categories = money_info_queryset.filter(
+        money_type="Expense").values_list("category", flat=True).distinct()
+
+    final_report = {}
+    for category in expense_categories:
+        total_quantity = money_info_queryset.filter(
+            category=category, money_type="Expense").aggregate(total=Sum("quantity"))['total']
+        final_report[category] = total_quantity or 0
+
+    return final_report
+
+
 def delete_expense(request):
     if not request.user.is_authenticated:
         return render(request, "index.html")
@@ -99,6 +129,7 @@ def delete_expense(request):
             return redirect("/history")
     except AddMoneyInfo.DoesNotExist:
         return render(request, "history.html", {"error": "Entry doesn't exist"})
+
 
 def handle_signup(request):
     if request.method == "POST":
