@@ -12,14 +12,14 @@
         <li>My expenses: {{ expenses }}</li>
     </ul>
     <form method="get" action="{% url 'add_expenses' %}">
-        <button type="submit">Add money details</button>
+        <button type="submit">Add Listing</button>
     </form>
 
     <form method="get" action="{% url 'history' %}">
-        <button type="submit">Money history</button>
+        <button type="submit">History</button>
     </form>
 
     <form method="get" action="{% url 'thirty_days' %}">
-        <button type="submit">Expense Summary /30 </button>
+        <button type="submit">30 days Summary</button>
     </form>
 {% endblock %}
