@@ -2,24 +2,29 @@
 {% block body %}
     {% include "header.html" %}
     {% if user.first_name %}
-        <h1>Welcome, {{ user.first_name }}!</h1>
+        <h1 style="padding: 10px;">Welcome, {{ user.first_name }}!</h1>
     {% else %}
-        <h1>Welcome, {{ user.username }}!</h1>
+        <h1 style="padding: 10px;">Welcome, {{ user.username }}!</h1>
     {% endif %}
     <ul>
         <li>My income: {{ income }}</li>
         <li>My savings: {{ savings }}</li>
         <li>My expenses: {{ expenses }}</li>
     </ul>
-    <form method="get" action="{% url 'add_expenses' %}">
-        <button type="submit">Add Listing</button>
-    </form>
+    <div style="display: flex; gap: 10px; padding: 10px;">
+        <form method="get" action="{% url 'add_expenses' %}">
+            <button type="submit">Add Listing</button>
+        </form>
 
-    <form method="get" action="{% url 'history' %}">
-        <button type="submit">History</button>
-    </form>
-
-    <form method="get" action="{% url 'thirty_days' %}">
-        <button type="submit">30 days Summary</button>
-    </form>
+        <form method="get" action="{% url 'history' %}">
+            <button type="submit">History</button>
+        </form>
+            <div class="dropdown">
+                <button class="dropbtn">Summaries</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'one_week' %}">One week</a>
+                    <a href="{% url 'thirty_days' %}">Thirty days</a>
+                </div>
+            </div>
+    </div>
 {% endblock %}

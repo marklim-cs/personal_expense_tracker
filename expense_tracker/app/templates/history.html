@@ -50,15 +50,17 @@
                     </div>
                     <br>
                     <h5>Get summary for</h5>
-                    <form method="get" action="{% url 'one_week' %}">
-                        <button type="submit">1 week</button>
-                    </form>
-                    <form method="get" action="{% url 'thirty_days' %}">
-                        <button type="submit">30 days</button>
-                    </form>
-                    <form>
-                        <button type="submit">Last year</button>
-                    </form>
+                    <div style="display: flex; gap: 10px;">
+                        <form method="get" action="{% url 'one_week' %}">
+                            <button type="submit">1 week</button>
+                        </form>
+                        <form method="get" action="{% url 'thirty_days' %}">
+                            <button type="submit">30 days</button>
+                        </form>
+                        <form>
+                            <button type="submit">Last year</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

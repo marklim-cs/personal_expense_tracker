@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
 {% block body %}
 {% include "header.html" %}
-    <h1>Add your money details</h1>
-    <form method="post" action="{% url 'add_expenses' %}">
-        {% csrf_token %}
-        {{ expenses_form }}
-        <button type="submit">Save</button>
-    </form>
+    <div style="padding: 10px;" >
+        <h1>Add your money details</h1>
+        <div style="padding: 10px;">
+            <form method="post" action="{% url 'add_expenses' %}">
+                {% csrf_token %}
+                {{ expenses_form }}
+                <button style="margin-top: 10px;" type="submit">Save</button>
+            </form>
+
+        </div>
+    </div>
 {% endblock %}

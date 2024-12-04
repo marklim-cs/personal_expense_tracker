@@ -1,10 +1,11 @@
 <header>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Log out</button>
-    </form>
-    <form method="get" action="{% url 'home' %}">
-        <button type="submit">Home</button>
-    </form>
-
+    <div style="display: flex; gap: 10px; padding: 10px;">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+        <form method="get" action="{% url 'home' %}">
+            <button type="submit">Home</button>
+        </form>
+    </div>
 </header>
