@@ -76,22 +76,17 @@ def history(request):
     return render(request, "history.html", {"page_obj": page_obj})
 
 def thirty_days_summary(request):
-    today = datetime.date.today()
-    one_month_ago = today - datetime.timedelta(days=30)
+    today_lte = datetime.date.today()
+    one_month_ago_gte = today_lte - datetime.timedelta(days=30)
 
     current_user = request.user
 
     if not current_user.is_authenticated:
         return render(request, "index.html")
 
-    expense_queryset = AddMoneyInfo.objects.filter(user=current_user, money_type="Expense", date__gte=one_month_ago, date__lte=today)
-    expense_summary = get_expense_category(expense_queryset)
-
-    income_queryset = AddMoneyInfo.objects.filter(user=current_user, money_type="Income", date__gte=one_month_ago, date__lte=today)
-    income_summary = get_income_total(income_queryset)
-
-    saving_queryset = AddMoneyInfo.objects.filter(user=current_user, money_type="Saving", date__gte=one_month_ago, date__lte=today)
-    saving_summary = get_saving_total(saving_queryset)
+    expense_summary = get_summary(current_user, "Expense", today_lte, one_month_ago_gte)
+    income_summary = get_summary(current_user, "Income", today_lte, one_month_ago_gte)
+    saving_summary = get_summary(current_user, "Saving", today_lte, one_month_ago_gte)
 
     context = {
         "expense_summary": expense_summary,
@@ -101,34 +96,54 @@ def thirty_days_summary(request):
 
     return render(request, "thirty_days.html",  context)
 
+def one_week_summary(request):
+    today_lte = datetime.date.today()
+    one_week_ago_gte = today_lte - datetime.timedelta(days=7)
 
-def get_expense_category(expense_queryset):
-    expense_categories = expense_queryset.filter(
-        money_type="Expense").values_list("category", flat=True).distinct()
+    current_user = request.user
+    if not current_user.is_authenticated:
+        return render(request, "index.html")
 
-    final_report = {}
-    for category in expense_categories:
-        total_quantity = expense_queryset.filter(
-            category=category, money_type="Expense").aggregate(total=Sum("quantity"))['total']
-        final_report[category] = total_quantity or 0
+    expense_summary = get_summary(current_user, "Expense", today_lte, one_week_ago_gte)
+    income_summary = get_summary(current_user, "Income", today_lte, one_week_ago_gte)
+    saving_summary = get_summary(current_user, "Saving", today_lte, one_week_ago_gte)
 
-    final_report["Total"] = expense_queryset.filter(money_type="Expense").aggregate(total=Sum("quantity"))['total']
+    context = {
+        "expense_summary": expense_summary,
+        "income_summary": income_summary, 
+        "saving_summary": saving_summary,
+    }
 
-    return final_report
+    return render(request, "one_week.html",  context)
 
-def get_income_total(income_queryset):
-    total_quantity = income_queryset.filter(money_type="Income").aggregate(total=Sum("quantity"))['total']
-    return total_quantity
 
-def get_saving_total(saving_queryset):
-    total_quantity = saving_queryset.filter(money_type="Saving").aggregate(total=Sum("quantity"))['total']
-    return total_quantity
+def get_summary(current_user, money_type, date1_lte, date2_gte):
+    queryset = AddMoneyInfo.objects.filter(user=current_user, money_type=money_type, date__gte=date2_gte, date__lte=date1_lte)
+
+    def get_total(queryset, money_type):
+        if money_type == "Expense":
+            expense_categories = queryset.filter(
+                money_type=money_type).values_list("category", flat=True).distinct()
+
+            final_report = {}
+            for category in expense_categories:
+                total_quantity = queryset.filter(
+                    category=category, money_type=money_type).aggregate(total=Sum("quantity"))['total']
+                final_report[category] = total_quantity or 0
+
+            final_report["Total"] = queryset.filter(money_type=money_type).aggregate(total=Sum("quantity"))['total']
+            return final_report
+        else:
+            total_quantity = queryset.filter(money_type=money_type).aggregate(total=Sum("quantity"))['total']
+            return total_quantity
+
+    summary = get_total(queryset, money_type)
+    return summary
 
 
 def delete_expense(request):
     if not request.user.is_authenticated:
         return render(request, "index.html")
-
 
     try:
         if request.method == "POST":
