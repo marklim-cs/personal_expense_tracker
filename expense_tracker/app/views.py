@@ -75,18 +75,39 @@ def history(request):
 
     return render(request, "history.html", {"page_obj": page_obj})
 
-def thirty_days_summary(request):
+def yearly_summary(request):
     today_lte = datetime.date.today()
-    one_month_ago_gte = today_lte - datetime.timedelta(days=30)
+    year_ago_gte = today_lte - datetime.timedelta(days=365)
 
     current_user = request.user
 
     if not current_user.is_authenticated:
         return render(request, "index.html")
 
-    expense_summary = get_summary(current_user, "Expense", today_lte, one_month_ago_gte)
-    income_summary = get_summary(current_user, "Income", today_lte, one_month_ago_gte)
-    saving_summary = get_summary(current_user, "Saving", today_lte, one_month_ago_gte)
+    expense_summary = get_summary(current_user, "Expense", today_lte, year_ago_gte)
+    income_summary = get_summary(current_user, "Income", today_lte, year_ago_gte)
+    saving_summary = get_summary(current_user, "Saving", today_lte, year_ago_gte)
+
+    context = {
+        "expense_summary": expense_summary,
+        "income_summary": income_summary, 
+        "saving_summary": saving_summary,
+    }
+
+    return render(request, "yearly.html", context)
+
+def thirty_days_summary(request):
+    today_lte = datetime.date.today()
+    month_ago_gte = today_lte - datetime.timedelta(days=30)
+
+    current_user = request.user
+
+    if not current_user.is_authenticated:
+        return render(request, "index.html")
+
+    expense_summary = get_summary(current_user, "Expense", today_lte, month_ago_gte)
+    income_summary = get_summary(current_user, "Income", today_lte, month_ago_gte)
+    saving_summary = get_summary(current_user, "Saving", today_lte, month_ago_gte)
 
     context = {
         "expense_summary": expense_summary,
@@ -98,15 +119,15 @@ def thirty_days_summary(request):
 
 def one_week_summary(request):
     today_lte = datetime.date.today()
-    one_week_ago_gte = today_lte - datetime.timedelta(days=7)
+    week_ago_gte = today_lte - datetime.timedelta(days=7)
 
     current_user = request.user
     if not current_user.is_authenticated:
         return render(request, "index.html")
 
-    expense_summary = get_summary(current_user, "Expense", today_lte, one_week_ago_gte)
-    income_summary = get_summary(current_user, "Income", today_lte, one_week_ago_gte)
-    saving_summary = get_summary(current_user, "Saving", today_lte, one_week_ago_gte)
+    expense_summary = get_summary(current_user, "Expense", today_lte, week_ago_gte)
+    income_summary = get_summary(current_user, "Income", today_lte, week_ago_gte)
+    saving_summary = get_summary(current_user, "Saving", today_lte, week_ago_gte)
 
     context = {
         "expense_summary": expense_summary,
@@ -117,8 +138,8 @@ def one_week_summary(request):
     return render(request, "one_week.html",  context)
 
 
-def get_summary(current_user, money_type, date1_lte, date2_gte):
-    queryset = AddMoneyInfo.objects.filter(user=current_user, money_type=money_type, date__gte=date2_gte, date__lte=date1_lte)
+def get_summary(current_user, money_type, today_lte, ago_gte):
+    queryset = AddMoneyInfo.objects.filter(user=current_user, money_type=money_type, date__gte=ago_gte, date__lte=today_lte)
 
     def get_total(queryset, money_type):
         if money_type == "Expense":
