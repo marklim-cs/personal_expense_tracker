@@ -2,20 +2,24 @@
 {% block body %}
     {% include "header.html" %}
     {% if user.first_name %}
-        <h1 style="padding: 10px;">Welcome, {{ user.first_name }}!</h1>
+        <h1 style="padding: 10px; padding-left: 20px;">Welcome, {{ user.first_name }}!</h1>
     {% else %}
-        <h1 style="padding: 10px;">Welcome, {{ user.username }}!</h1>
+        <h1 style="padding: 10px; padding-left: 20px;">Welcome, {{ user.username }}!</h1>
     {% endif %}
-    <ul>
-        <li>My income: {{ income }}</li>
-        <li>My savings: {{ savings }}</li>
-        <li>My expenses: {{ expenses }}</li>
+    <ul style="padding-left: 50px;">
+        <li>Current balance: {{ current_balance }}</li>
+        <li>Total savings: {{ savings }}</li>
     </ul>
-    <div style="display: flex; gap: 10px; padding: 10px;">
+    <h3 style="padding: 10px; padding-left: 20px;">{{ month }}, {{ year }}</h3>
+    <ul style="padding-left: 50px;">
+        <li>Expenses: {{ this_month_expenses }}</li>
+        <li>Income: {{ this_month_income }}</li>
+        <li>Savings: {{ this_month_savings }}</li>
+    </ul>
+    <div style="display: flex; gap: 10px; padding: 10px; padding-left: 20px;">
         <form method="get" action="{% url 'add_expenses' %}">
             <button type="submit">Add Listing</button>
         </form>
-
         <form method="get" action="{% url 'history' %}">
             <button type="submit">History</button>
         </form>

@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
 from django.core.paginator import Paginator
-from django.db.models import Avg, Sum
+from django.db.models import Sum
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
 from .models import UserProfile, AddMoneyInfo
 
@@ -19,13 +19,43 @@ def home(request):
         return render(request, "index.html")
 
     user_profile = UserProfile.objects.get(user=request.user)
+    current_balance = user_profile.income - user_profile.expenses
+
+    today = datetime.date.today()
+    month = today.month
+    year = today.year
+    month_name = today.strftime("%B")
+
+    this_month_expenses = AddMoneyInfo.objects.filter(
+        user=request.user,
+        date__month=month,
+        date__year=year,
+        money_type="Expense"
+    ).aggregate(total=Sum("quantity"))
+
+    this_month_income = AddMoneyInfo.objects.filter(
+        user=request.user,
+        date__month=month,
+        date__year=year,
+        money_type="Income"
+    ).aggregate(total=Sum("quantity"))
+
+    this_month_savings = AddMoneyInfo.objects.filter(
+        user=request.user,
+        date__month=month,
+        date__year=year,
+        money_type="Saving"
+    ).aggregate(total=Sum("quantity"))
 
     context = {
         "user": request.user, 
-        "profession": user_profile.profession, 
         "savings": user_profile.savings, 
-        "income": user_profile.income,
-        "expenses": user_profile.expenses,
+        "current_balance": current_balance,
+        "this_month_expenses": this_month_expenses['total'],
+        "this_month_income": this_month_income['total'],
+        "this_month_savings": this_month_savings['total'],
+        "month": month_name, 
+        "year": year,
     }
 
     return render(request, "home.html", context)
