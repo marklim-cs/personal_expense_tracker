@@ -12,4 +12,5 @@ urlpatterns = [
     path("delete_expense", views.delete_expense, name="delete_expense"),
     path("thirty_days", views.thirty_days_summary, name="thirty_days"),
     path("one_week", views.one_week_summary, name="one_week"),
+    path("year_to_date", views.year_to_date_summary, name="year_to_date"),
 ]

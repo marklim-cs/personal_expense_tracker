@@ -35,6 +35,9 @@ class AddMoneyInfo(models.Model):
     date = models.DateField(default=now)
     category = models.CharField(max_length=20, choices=SELECT_CATEGORY, default="Food")
 
+    def __str__(self):
+        return f"User: {self.user}, {self.money_type}, {self.quantity}, {self.date}"
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profession = models.CharField(max_length=20, choices=PROFESSION)

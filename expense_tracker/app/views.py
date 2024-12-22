@@ -75,7 +75,7 @@ def history(request):
 
     return render(request, "history.html", {"page_obj": page_obj})
 
-def yearly_summary(request):
+def year_to_date_summary(request):
     today_lte = datetime.date.today()
     year_ago_gte = today_lte - datetime.timedelta(days=365)
 
@@ -94,7 +94,7 @@ def yearly_summary(request):
         "saving_summary": saving_summary,
     }
 
-    return render(request, "yearly.html", context)
+    return render(request, "year_to_date.html", context)
 
 def thirty_days_summary(request):
     today_lte = datetime.date.today()
