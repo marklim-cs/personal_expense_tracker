@@ -15,7 +15,14 @@
         <form method="get" action="{% url 'add_expenses' %}">
             <button type="submit">Add Listing</button>
         </form>
-
+        <div class="dropdown">
+            <button class="dropbtn">Add</button>
+            <div class="dropdown-content">
+                <a>Expense</a>
+                <a>Income</a>
+                <a>Saving</a>
+            </div>
+        </div>
         <form method="get" action="{% url 'history' %}">
             <button type="submit">History</button>
         </form>

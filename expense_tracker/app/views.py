@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
 from django.core.paginator import Paginator
-from django.db.models import Avg, Sum
+from django.db.models import Sum
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
 from .models import UserProfile, AddMoneyInfo
 
@@ -22,7 +22,6 @@ def home(request):
 
     context = {
         "user": request.user, 
-        "profession": user_profile.profession, 
         "savings": user_profile.savings, 
         "income": user_profile.income,
         "expenses": user_profile.expenses,
