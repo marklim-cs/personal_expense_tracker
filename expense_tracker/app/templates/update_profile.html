@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% include "header.html" %}
+{% block body %}
+    <h1>Edit profile</h1>
+    <form method="post" action="{% url 'update_profile'%}">
+        {% csrf_token %}
+        {{profile_form.as_p}}
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

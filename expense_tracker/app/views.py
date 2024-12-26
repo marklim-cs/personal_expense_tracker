@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password #hash the password
+from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from .forms import UserForm, UserProfileForm, LoginForm, AddMoneyForm
@@ -94,7 +95,24 @@ def add_expenses(request):
     return render(request, 'add_expenses.html', {"expenses_form": expenses_form})
 
 def update_profile(request):
-    pass
+    if not request.user.is_authenticated:
+        return render(request, "index.html")
+
+    if request.method == "POST":
+        try:
+            profile = request.user.userprofile
+        except UserProfile.DoesNotExist:
+            return HttpResponse("Profile does not exist, please create one.", status=404)
+
+        profile_form = UserProfileForm(request.POST, instance=profile)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect("/home")
+    else:
+        profile_form = UserProfileForm()
+
+        return render(request, "update_profile.html", {"profile_form": profile_form})
 
 def update_entry(request):
     pass
