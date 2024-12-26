@@ -93,6 +93,12 @@ def add_expenses(request):
 
     return render(request, 'add_expenses.html', {"expenses_form": expenses_form})
 
+def update_profile(request):
+    pass
+
+def update_entry(request):
+    pass
+
 def history(request):
     if not request.user.is_authenticated:
         return render(request, "index.html")
@@ -122,9 +128,10 @@ def year_to_date_summary(request):
         "expense_summary": expense_summary,
         "income_summary": income_summary, 
         "saving_summary": saving_summary,
+        "title": "Last 356 Days",
     }
 
-    return render(request, "year_to_date.html", context)
+    return render(request, "summary.html", context)
 
 def thirty_days_summary(request):
     today_lte = datetime.date.today()
@@ -143,9 +150,10 @@ def thirty_days_summary(request):
         "expense_summary": expense_summary,
         "income_summary": income_summary, 
         "saving_summary": saving_summary,
+        "title": "Last 30 Days"
     }
 
-    return render(request, "thirty_days.html",  context)
+    return render(request, "summary.html",  context)
 
 def one_week_summary(request):
     today_lte = datetime.date.today()
@@ -163,9 +171,10 @@ def one_week_summary(request):
         "expense_summary": expense_summary,
         "income_summary": income_summary, 
         "saving_summary": saving_summary,
+        "title": "1 week summary"
     }
 
-    return render(request, "one_week.html",  context)
+    return render(request, "summary.html",  context)
 
 
 def get_summary(current_user, money_type, today_lte, ago_gte):

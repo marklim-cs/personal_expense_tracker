@@ -57,8 +57,8 @@
                         <form method="get" action="{% url 'thirty_days' %}">
                             <button type="submit">30 days</button>
                         </form>
-                        <form>
-                            <button type="submit">Last year</button>
+                        <form method="get" action="{% url 'year_to_date' %}">
+                            <button type="submit">Year to date</button>
                         </form>
                     </div>
                 </div>
