@@ -12,7 +12,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        exclude = ["user", "expenses"]
+        exclude = ["user"]
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=100, label="Username")

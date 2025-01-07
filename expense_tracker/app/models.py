@@ -42,8 +42,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profession = models.CharField(max_length=20, choices=PROFESSION)
     savings = models.IntegerField(null=True, blank=True, default=0)
-    income = models.IntegerField(null=True, blank=True, default=0)
-    expenses = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return f"{self.user}"

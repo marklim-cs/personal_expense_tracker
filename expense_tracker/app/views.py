@@ -20,7 +20,6 @@ def home(request):
         return render(request, "index.html")
 
     user_profile = UserProfile.objects.get(user=request.user)
-    current_balance = user_profile.income - user_profile.expenses
 
     today = datetime.date.today()
     month = today.month
@@ -32,29 +31,29 @@ def home(request):
         date__month=month,
         date__year=year,
         money_type="Expense"
-    ).aggregate(total=Sum("quantity"))
+    ).aggregate(total=Sum("quantity"))['total'] or 0
 
     this_month_income = AddMoneyInfo.objects.filter(
         user=request.user,
         date__month=month,
         date__year=year,
         money_type="Income"
-    ).aggregate(total=Sum("quantity"))
+    ).aggregate(total=Sum("quantity"))['total'] or 0
 
     this_month_savings = AddMoneyInfo.objects.filter(
         user=request.user,
         date__month=month,
         date__year=year,
         money_type="Saving"
-    ).aggregate(total=Sum("quantity"))
+    ).aggregate(total=Sum("quantity"))['total'] or 0
 
     context = {
         "user": request.user, 
         "savings": user_profile.savings, 
-        "current_balance": current_balance,
-        "this_month_expenses": this_month_expenses['total'],
-        "this_month_income": this_month_income['total'],
-        "this_month_savings": this_month_savings['total'],
+        #"current_balance": current_balance,
+        "this_month_expenses": this_month_expenses,
+        "this_month_income": this_month_income,
+        "this_month_savings": this_month_savings,
         "month": month_name, 
         "year": year,
     }
@@ -78,15 +77,9 @@ def add_expenses(request):
 
             user_profile = UserProfile.objects.get(user=request.user)
 
-            if money_type == "Expense":
-                user_profile.expenses = user_profile.expenses + quantity
-                user_profile.save(update_fields=["expenses"])
-            elif money_type == "Saving":
+            if money_type == "Saving":
                 user_profile.savings = user_profile.savings + quantity
                 user_profile.save(update_fields=["savings"])
-            elif money_type == "Income":
-                user_profile.income = user_profile.income + quantity
-                user_profile.save(update_fields=["income"])
 
             return redirect("/home")
     else:
@@ -113,9 +106,6 @@ def update_profile(request):
         profile_form = UserProfileForm()
 
         return render(request, "update_profile.html", {"profile_form": profile_form})
-
-def update_entry(request):
-    pass
 
 def history(request):
     if not request.user.is_authenticated:
@@ -217,6 +207,9 @@ def get_summary(current_user, money_type, today_lte, ago_gte):
 
     summary = get_total(queryset, money_type)
     return summary
+
+def pie_chart():
+    pass
 
 
 def delete_expense(request):
