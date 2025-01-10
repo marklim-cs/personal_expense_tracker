@@ -47,6 +47,7 @@ def home(request):
         money_type="Saving"
     ).aggregate(total=Sum("quantity"))['total'] or 0
 
+
     context = {
         "user": request.user, 
         "savings": user_profile.savings, 
