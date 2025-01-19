@@ -45,13 +45,25 @@ def home(request):
         date__month=month,
         date__year=year,
         money_type="Saving"
+        ).aggregate(total=Sum("quantity"))['total'] or 0
+
+    current_income = AddMoneyInfo.objects.filter(
+        user=request.user,
+        money_type="Income"
+        ).aggregate(total=Sum("quantity"))['total'] or 0
+
+    current_expense = AddMoneyInfo.objects.filter(
+        user=request.user,
+        money_type="Expense"
     ).aggregate(total=Sum("quantity"))['total'] or 0
+
+    current_balance = current_income - current_expense
 
 
     context = {
         "user": request.user, 
         "savings": user_profile.savings, 
-        #"current_balance": current_balance,
+        "current_balance": current_balance,
         "this_month_expenses": this_month_expenses,
         "this_month_income": this_month_income,
         "this_month_savings": this_month_savings,

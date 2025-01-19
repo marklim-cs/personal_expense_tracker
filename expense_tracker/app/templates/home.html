@@ -6,8 +6,9 @@
     {% else %}
         <h1 style="padding: 10px; padding-left: 20px;">Welcome, {{ user.username }}!</h1>
     {% endif %}
+    <h2>Let's track your expenses together for better financial insights!</h2>
     <ul style="padding-left: 50px;">
-        <!--<li>Current balance: {{ current_balance }}</li> -->
+        <li>Current balance: {{ current_balance }}</li>
         <li>Total savings: {{ savings }}</li>
     </ul>
     <h3 style="padding: 10px; padding-left: 20px;">{{ month }}, {{ year }}</h3>
