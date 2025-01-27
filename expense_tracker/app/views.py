@@ -252,7 +252,7 @@ def delete_expense(request):
         return render(request, "history.html", {"error": "Entry doesn't exist"})
 
 
-def handle_signup(request):
+def signup(request):
     if request.method == "POST":
         user_form = UserForm(request.POST)
         profile_form = UserProfileForm(request.POST)
@@ -275,7 +275,7 @@ def handle_signup(request):
 
     return render(request, "signup.html", {'user_form': user_form, 'profile_form': profile_form})
 
-def handle_login(request):
+def log_in(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
 
@@ -296,7 +296,7 @@ def handle_login(request):
 
     return render(request, "login.html", {"login_form": login_form})
 
-def handle_logout(request):
+def logout(request):
     logout(request)
     messages.success(request, "Successfuly logged out!")
     return render(request, "logout.html")
